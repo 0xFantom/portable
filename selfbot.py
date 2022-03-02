@@ -3,6 +3,7 @@ import colorama
 import discord
 import humanize
 import jstyleson
+import time
 
 import requests as req
 from discord.ext import commands
@@ -63,6 +64,7 @@ if __AUTOUPDATE__:
             f.write(body)
         print(f"Updated {__file__}")
         print(f"Run {__file__} again to use the new version")
+        time.sleep(3)
         exit()
 
 # Colors
