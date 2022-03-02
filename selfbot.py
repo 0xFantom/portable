@@ -218,5 +218,5 @@ if __name__ == "__main__":
         exit(1)
     bot.run(
         __TOKEN__,
-        bot=__SELFBOT__
+        bot=not __SELFBOT__
     )
