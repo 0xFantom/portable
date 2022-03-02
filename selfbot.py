@@ -27,8 +27,8 @@ if not os.path.exists("mentions.txt"):
     with open("mentions.txt", "w") as f:
         f.write("")
 
-if not os.path.exists("config.jsonc"):
-    with open("config.jsonc", "w") as f:
+if not os.path.exists("./config.jsonc"):
+    with open("./config.jsonc", "w") as f:
         f.write("""{
             "token": "",
             "prefix": "s.",

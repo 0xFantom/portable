@@ -1,2 +1,3 @@
-*.txt
-*.jsonc
+mentions.txt
+tokens.txt
+config.jsonc
