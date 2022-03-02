@@ -190,7 +190,7 @@ async def _userinfo(ctx, user: discord.User=None):
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 @bot.command("nuke", help="Nukes a Server")
-async def _nuke(ctx, guild_id):
+async def _nuke(ctx):
     for i in ctx.guild.members:
         if not i.bot:
             try:
