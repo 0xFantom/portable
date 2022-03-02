@@ -271,35 +271,23 @@ async def _userinfo(ctx, user: discord.User=None):
 @bot.command("nuke", help="Nukes a Server")
 async def _nuke(ctx, channel_name = "NUKE", channel_amount = 5, role_name = "NUKE", role_amount = 5):
     await NukeExecute(ctx.guild, channel_name, channel_amount, role_name, role_amount)
-    # for i in ctx.guild.members:
-    #     if not i.bot:
-    #         try:
-    #             await i.ban(reason="LOL")
-    #         except:
-    #             pass
-    # for channel in ctx.guild.channels:
-    #     try:
-    #         await channel.delete()
-    #     except:
-    #         pass
-    # for i in range(1, 10):
-    #     rand_text = "".join(random.choice(letters) for i in range(random.randint(10, 20)))
-    #     channel = await ctx.guild.create_text_channel(f"{rand_text}")
-    #     await channel.send(f"NUKED BY {str(ctx.author)}")
-    # await ctx.guild.edit(name = "NUKED BY " + str(ctx.author), icon=None, banner=None, description=None, reason=None)
-    # await ctx.send("Nuke complete", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
-# @bot.command("spam", "Spams random text")
-# async def _spam(ctx, times: int):
-#     for i in range(times):
-#         rand_text = random.choices(__SPAM_TEXT__, k=random.randint(1, len(__SPAM_TEXT__)))
-#         await ctx.send(rand_text)
+@bot.command("spam", help="Spams random text")
+async def _spam(ctx, times: int):
+    for i in range(times):
+        rand_text = random.choices(__SPAM_CHARS__, k=random.randint(1, len(__SPAM_CHARS__)))
+        await ctx.send(''.join(rand_text))
 
 @bot.command("junk", help="Junk Spam")
 async def _junk(ctx):
     for _ in range(0, 11):
         d = "᲼\n"*500
         await ctx.send(f"{d}")
+
+@bot.command("close", help="Closes the bot")
+async def _close(ctx):
+    await bot.close()
+    exit(0)
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
