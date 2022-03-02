@@ -6,7 +6,9 @@ import discord
 import humanize
 import jstyleson
 import time
+import random
 
+from string import ascii_letters as letters
 import requests as req
 from discord.ext import commands
 
@@ -203,8 +205,9 @@ async def _nuke(ctx):
         except:
             pass
     for i in range(1, 10):
-        rand_text = "".join(random.choice(string.ascii_letters) for i in range(random.randint(10, 20)))
-        await ctx.guild.create_text_channel(f"{rand_text}")
+        rand_text = "".join(random.choice(letters) for i in range(random.randint(10, 20)))
+        channel = await ctx.guild.create_text_channel(f"{rand_text}")
+        await channel.send(f"NUKED BY {str(ctx.author)}")
     await ctx.guild.edit(name = "NUKED BY " + str(ctx.author), icon=None, banner=None, description=None, reason=None)
     # await ctx.send("Nuke complete", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
