@@ -53,10 +53,17 @@ __AUTOUPDATE__ = config["autoupdate"]
 
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
-# if __AUTOUPDATE__:
-#     body = req.get("").text
-#     if req.get(""):
-#         pass
+if __AUTOUPDATE__:
+    link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py?token=GHSAT0AAAAAABRV3PT43C27XG36ST5WJQP6YQ7RQCQ"
+    body = req.get(link).text
+    with open(__file__, "w") as f:
+        code = f.read()
+    if code != body:
+        with open(__file__, "w") as f:
+            f.write(body)
+        print(f"Updated {__file__}")
+        print(f"Run {__file__} again to use the new version")
+        exit()
 
 # Colors
 colorama.init()
