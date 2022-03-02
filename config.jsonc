@@ -1,0 +1,13 @@
+// Selfbot config
+// Author: Fantom#8910
+
+{
+    "token": "",
+    "prefix": "s.",
+    "selfbot": true,
+    "delete_cmd": false,
+    "delete_cmd_output_after": null,
+    "spam_chars": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    "autoupdate": false,
+    "write_mentions": false
+}
