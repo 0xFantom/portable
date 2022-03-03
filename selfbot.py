@@ -185,13 +185,12 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if not message.author.id == bot.user.id: return
-
     if f"<@!{bot.user.id}>" in message.content and not message.author.id == bot.user.id:
         print(f"{blue}[PING]{RESET} ~ " + f"{str(message.author)} >>> {replace_mention(message.content, bot.user.id, bot.user.name)}")
         with open("mentions.txt", "a") as f:
             f.write(f"\n{str(message.author)} >>> {replace_mention(message.content, bot.user.id, bot.user.name)}")
 
+    if not message.author.id == bot.user.id: return
     await bot.process_commands(message)
 
 @bot.event
