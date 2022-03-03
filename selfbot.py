@@ -304,16 +304,6 @@ async def _stealpfp(ctx, user: discord.User):
 async def _stealname(ctx, user: discord.User):
     await bot.user.edit(username=user.name, password=__PASSWORD__)
 
-# TODO: 
-#  - ban
-#  - kick
-#  - ascii
-#  - token info
-#  - config
-#  - server info
-#  - performance
-#  - scrape
-
 @bot.command("ban", help="Bans a user", aliases=["b"])
 async def _ban(ctx, user: discord.user, *, reason: str=None):
     await ctx.guild.ban(user, reason=reason)
