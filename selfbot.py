@@ -344,13 +344,6 @@ async def _tokeninfo(ctx, token):
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
-# @bot.command("config", help="changes config", aliases=["c"])
-# async def _config(ctx, key: str, value: str):
-#     info = config
-#     info[key] = value
-#     with open("config.jsonc", "w") as f:
-#         jstyleson.dump(info, f)
-
 @bot.command("serverinfo", help="Shows server info", aliases=["si"])
 async def _serverinfo(ctx):
     info = [
@@ -379,12 +372,13 @@ async def _serverinfo(ctx):
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
-@bot.command("ateveryone", help="@s everyone", aliases=["@"])
-async def _ateveryone(ctx):
-    txt = ""
-    for member in ctx.guild.members:
-        txt += f"@{member.name} "
-    await ctx.send(txt)
+# @bot.command("ateveryone", help="@s everyone", aliases=["@"])
+# async def _ateveryone(ctx):
+#     txt = ""
+#     guild = bot.fetch_guild(guild_id=ctx.guild.id)
+#     for member in guild.members:
+#         txt += f"@{member.name} "
+#     await ctx.send(txt)
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
