@@ -148,18 +148,18 @@ __PASSWORD__ = config["password"]
 
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
-if __AUTOUPDATE__:
-    link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py"
-    body = requests.get(link).text
-    with open(__file__, "w") as f:
-        code = f.read()
-    if code != body:
-        with open(__file__, "w") as f:
-            f.write(body)
-        print(f"Updated {__file__}")
-        print(f"Run {__file__} again to use the new version")
-        time.sleep(3)
-        exit()
+# if __AUTOUPDATE__:
+#     link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py"
+#     body = requests.get(link).text
+#     with open(__file__, "w") as f:
+#         code = f.read()
+#     if code != body:
+#         with open(__file__, "w") as f:
+#             f.write(body)
+#         print(f"Updated {__file__}")
+#         print(f"Run {__file__} again to use the new version")
+#         time.sleep(3)
+#         exit()
 
 # Colors
 colorama.init()
@@ -348,6 +348,8 @@ async def _tokeninfo(ctx, token):
         elif i == "Token": res.append(f"[{center(i, padding)}] {token}")
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
+
+
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
