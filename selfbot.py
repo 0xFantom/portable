@@ -349,7 +349,40 @@ async def _tokeninfo(ctx, token):
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
+@bot.command("config", help="changes config", aliases=["c"])
+async def _config(ctx, key: str, value: str):
+    info = config
+    info[key] = value
+    with open("config.jsonc", "w") as f:
+        json.dump(info, f)
 
+@bot.command("serverinfo", help="Shows server info", aliases=["si"])
+async def _serverinfo(ctx):
+    info = [
+        "Name",
+        "ID",
+        "Owner",
+        "Owner ID",
+        "Region",
+        "Verification Level",
+        "Member Count",
+        "Created at"
+    ]
+    longest = max(len(i) for i in info)
+    padding = longest + 2
+    res = ["```ini"]
+    guild = ctx.message.guild
+    for i in info:
+        if i == "Name": res.append(f"[{center(i, padding)}] {str(guild.name)}")
+        elif i == "ID": res.append(f"[{center(i, padding)}] {str(guild.id)}")
+        elif i == "Owner": res.append(f"[{center(i, padding)}] {str(guild.owner)}")
+        elif i == "Owner ID": res.append(f"[{center(i, padding)}] {str(guild.owner.id)}")
+        elif i == "Region": res.append(f"[{center(i, padding)}] {str(guild.region)}")
+        elif i == "Verification Level": res.append(f"[{center(i, padding)}] {str(guild.verification_level)}")
+        elif i == "Member Count": res.append(f"[{center(i, padding)}] {str(guild.member_count)}")
+        elif i == "Created at": res.append(f"[{center(i, padding)}] {str(format_time((guild.created_at)))}")
+    res.append("```")
+    await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
@@ -368,6 +401,7 @@ if __name__ == "__main__":
                 "password": "" // Only if you want to use steal pfp or steal username
             }
             """.replace("666", __TOKEN__)
+            f.write(prmpt)
 
     bot.run(
         __TOKEN__,
