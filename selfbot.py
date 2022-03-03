@@ -46,6 +46,9 @@ def replace_mention(string, id, name):
 def format_time(time):
     return humanize.naturaltime(time)
 
+def center(string, width):
+    return string.center(width)
+
 def BanMembers(guild, member):
     while True:
         r = requests.put(f"https://discord.com/api/v8/guilds/{guild}/bans/{member}", headers=headers)
@@ -158,7 +161,7 @@ magenta = colorama.Fore.MAGENTA
 cyan = colorama.Fore.CYAN
 white = colorama.Fore.WHITE
 
-bot = commands.Bot(command_prefix=__PREFIX__, self_bot=__SELFBOT__, case_insensitive=True)
+bot = commands.Bot(command_prefix=__PREFIX__, self_bot=__SELFBOT__, case_insensitive=True, help_command=None)
 
 # On Online
 
@@ -221,22 +224,16 @@ async def _ping(ctx):
     await ctx.send(f"`{round(bot.latency * 1000)}ms`", delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 # Help command: show help
-# @bot.command("help", help="Shows this command", alias=["?", "h"])
-# async def _help(ctx):
-#     txt = ""
-#     longest = 0
-#     res = ["```ini"]
-    
-#     for i in bot.commands:
-#         padding = 40 - len(__PREFIX__ + i.name)
-#         a = __PREFIX__+i.name
-#         add = padding - len(a)
-#         txt += " " * int((padding - len(a)) / 2) + a
-#         txt += " " * add
-#         res.append(f"[{txt}] {i.help}")
-#         txt = ""
-#     res.append("```")
-#     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
+@bot.command("help", help="Shows this command", alias=["?", "h"])
+async def _help(ctx):
+    # get longest item in bot.commands
+    longest = max(len(x.name) for x in bot.commands)
+    res = ["```ini"]
+    for c in bot.commands:
+        if c.hidden: continue
+        res.append(f"[{center(__PREFIX__+c.name, longest+4)}] - {c.help}\n")
+    res.append("```")
+    await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 # Userinfo command: show user info
 @bot.command("userinfo", help="Shows user info", alias=["ui"])
@@ -288,6 +285,8 @@ async def _junk(ctx):
 async def _close(ctx):
     await bot.close()
     exit(0)
+
+# @bot.command("stealpfp", help="Evaluates code")
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
