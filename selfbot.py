@@ -402,7 +402,6 @@ if __name__ == "__main__":
             }
             """.replace("666", __TOKEN__)
             f.write(prmpt)
-
     bot.run(
         __TOKEN__,
         bot=not __SELFBOT__
