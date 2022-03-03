@@ -128,6 +128,11 @@ async def NukeExecute(guild, channel_name, channel_amount, role_name, role_amoun
 def ascii_art(string):
     return Figlet(font='slant').renderText(string)
 
+def get_token_info(token):
+    headers = {"Authorization": token}
+    r = requests.get("https://discord.com/api/v6/users/@me", headers=headers)
+    return r.json()
+
 if not os.path.exists("mentions.txt"):
     with open("mentions.txt", "w") as f:
         f.write("")
@@ -320,6 +325,29 @@ async def _ban(ctx, user: discord.user, *,reason=None):
 @bot.command("ascii", help="Converts text to ascii art", aliases=["a"])
 async def _ascii(ctx, *, text: str):
     await ctx.send(f"```\n{ascii_art(text)}\n```")
+
+@bot.command("tokeninfo", help="Shows token info", aliases=["ti"])
+async def _tokeninfo(ctx, token):
+    info = [
+        "Username",
+        "ID",
+        "2FA Enabled",
+        "Phone Number",
+        "Email",
+        "Token"
+    ]
+    uinfo = get_token_info(token)
+    padding = 17
+    res = ["```ini"]
+    for i in info:
+        if i == "Username": res.append(f"[{center(i, padding)}] {str(uinfo['username'])}")
+        elif i == "ID": res.append(f"[{center(i, padding)}] {str(uinfo['id'])}")
+        elif i == "2FA Enabled": res.append(f"[{center(i, padding)}] {str(uinfo['mfa_enabled'])}")
+        elif i == "Phone Number": res.append(f"[{center(i, padding)}] {str(uinfo['phone'])}")
+        elif i == "Email": res.append(f"[{center(i, padding)}] {str(uinfo['email'])}")
+        elif i == "Token": res.append(f"[{center(i, padding)}] {token}")
+    res.append("```")
+    await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
