@@ -358,7 +358,7 @@ if __name__ == "__main__":
         with open(file="config.jsonc", mode="w") as f:
             prmpt = """
             {
-                "token": "%s",
+                "token": "666",
                 "prefix": "s.",
                 "delete_cmd": true,
                 "delete_cmd_output_after": null,
@@ -367,7 +367,7 @@ if __name__ == "__main__":
                 "write_mentions": false,
                 "password": "" // Only if you want to use steal pfp or steal username
             }
-            """ % __TOKEN__
+            """.replace("666", __TOKEN__)
 
     bot.run(
         __TOKEN__,
