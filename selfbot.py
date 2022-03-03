@@ -149,7 +149,6 @@ __DELETE_CMD__ = config["delete_cmd"] # Deletes the command: for example, if you
 __DELETE_CMD_OUTPUT_AFTER__ = config["delete_cmd_output_after"] # None = doesnt delete the output
 __SPAM_CHARS__ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 __AUTOUPDATE__ = config["autoupdate"]
-# __PASSWORD__ = config["password"]
 
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
