@@ -354,7 +354,21 @@ async def _tokeninfo(ctx, token):
 if __name__ == "__main__":
     if __TOKEN__ == "":
         print(f"{red}[ERROR]{RESET} ~ No token found. Please add your token to the config.jsonc file.")
-        exit(1)
+        __TOKEN__ = input("Token: ")
+        with open(file="config.jsonc", mode="w") as f:
+            prmpt = """
+            {
+                "token": "%s",
+                "prefix": "s.",
+                "delete_cmd": true,
+                "delete_cmd_output_after": null,
+                "spam_chars": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                "autoupdate": false,
+                "write_mentions": false,
+                "password": "" // Only if you want to use steal pfp or steal username
+            }
+            """ % __TOKEN__
+
     bot.run(
         __TOKEN__,
         bot=not __SELFBOT__
