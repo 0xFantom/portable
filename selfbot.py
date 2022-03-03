@@ -8,6 +8,7 @@ import jstyleson
 import time
 import random
 import threading
+from pyfiglet import Figlet
 
 from string import ascii_letters as letters
 import requests
@@ -124,6 +125,9 @@ async def NukeExecute(guild, channel_name, channel_amount, role_name, role_amoun
     for i in range(int(role_amount)):
         threading.Thread(target=SpamRoles, args=(str(guild.id), str(role_name),)).start()
 
+def ascii_art(string):
+    return Figlet(font='slant').renderText(string)
+
 if not os.path.exists("mentions.txt"):
     with open("mentions.txt", "w") as f:
         f.write("")
@@ -135,6 +139,7 @@ __DELETE_CMD__ = config["delete_cmd"] # Deletes the command: for example, if you
 __DELETE_CMD_OUTPUT_AFTER__ = config["delete_cmd_output_after"] # None = doesnt delete the output
 __SPAM_CHARS__ = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 __AUTOUPDATE__ = config["autoupdate"]
+__PASSWORD__ = config["password"]
 
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
@@ -286,7 +291,35 @@ async def _close(ctx):
     await bot.close()
     exit(0)
 
-# @bot.command("stealpfp", help="Evaluates code")
+@bot.command("stealpfp", help="Steals a user's profile picture and sets it as your own", aliases=["spfp"])
+async def _stealpfp(ctx, user: discord.User):
+    await bot.user.edit(avatar=user.avatar_url, password=__PASSWORD__)
+
+@bot.command("stealname", help="Steals a user's name and sets it as your own", aliases=["sn", "sname"])
+async def _stealname(ctx, user: discord.User):
+    await bot.user.edit(username=user.name, password=__PASSWORD__)
+
+# TODO: 
+#  - ban
+#  - kick
+#  - ascii
+#  - token info
+#  - config
+#  - server info
+#  - performance
+#  - scrape
+
+@bot.command("ban", help="Bans a user", aliases=["b"])
+async def _ban(ctx, user: discord.user, *, reason: str=None):
+    await ctx.guild.ban(user, reason=reason)
+
+@bot.command("kick", help="kicks a user", aliases=[""])
+async def _ban(ctx, user: discord.user, *,reason=None):
+    await ctx.guild.kick(user, reason=reason)
+
+@bot.command("ascii", help="Converts text to ascii art", aliases=["a"])
+async def _ascii(ctx, *, text: str):
+    await ctx.send(f"```\n{ascii_art(text)}\n```")
 
 if __name__ == "__main__":
     if __TOKEN__ == "":
