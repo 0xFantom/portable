@@ -144,7 +144,7 @@ __PASSWORD__ = config["password"]
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
 if __AUTOUPDATE__:
-    link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py?token=GHSAT0AAAAAABRV3PT43C27XG36ST5WJQP6YQ7RQCQ"
+    link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py"
     body = requests.get(link).text
     with open(__file__, "w") as f:
         code = f.read()
