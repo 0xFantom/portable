@@ -374,6 +374,13 @@ async def _serverinfo(ctx):
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
+@bot.command("ateveryone", help="@s everyone", aliases=["@"])
+async def _ateveryone(ctx):
+    txt = ""
+    for member in ctx.guild.members:
+        txt += f"@{member.name} "
+    await ctx.send(txt)
+
 if __name__ == "__main__":
     if __TOKEN__ == "":
         print(f"{red}[ERROR]{RESET} ~ No token found. Please add your token to the config.jsonc file.")
