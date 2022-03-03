@@ -153,19 +153,6 @@ __AUTOUPDATE__ = config["autoupdate"]
 
 WRITE_MENTIONS = config["write_mentions"] # If True, all mentions will be saved to mentions.txt
 
-# if __AUTOUPDATE__:
-#     link = "https://raw.githubusercontent.com/HACKERqq420/self/main/selfbot.py"
-#     body = requests.get(link).text
-#     with open(__file__, "w") as f:
-#         code = f.read()
-#     if code != body:
-#         with open(__file__, "w") as f:
-#             f.write(body)
-#         print(f"Updated {__file__}")
-#         print(f"Run {__file__} again to use the new version")
-#         time.sleep(3)
-#         exit()
-
 # Colors
 colorama.init()
 red = colorama.Fore.RED
@@ -176,7 +163,7 @@ magenta = colorama.Fore.MAGENTA
 cyan = colorama.Fore.CYAN
 white = colorama.Fore.WHITE
 
-bot = commands.Bot(command_prefix=__PREFIX__, self_bot=__SELFBOT__, case_insensitive=True, help_command=None)
+bot = commands.Bot(command_prefix=__PREFIX__, self_bot=True, case_insensitive=True, help_command=None)
 
 # On Online
 
@@ -400,5 +387,5 @@ if __name__ == "__main__":
             f.write(prmpt)
     bot.run(
         __TOKEN__,
-        bot=not __SELFBOT__
+        bot=False
     )
