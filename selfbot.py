@@ -14,6 +14,11 @@ from string import ascii_letters as letters
 import requests
 from discord.ext import commands
 
+try:
+    os.system("title Selfbot")
+except:
+    pass
+
 if not os.path.exists("./config.jsonc"):
     with open("./config.jsonc", "w") as f:
         f.write("""{
@@ -182,6 +187,7 @@ async def on_ready():
     print(f"{MAIN_CLR}Friends  {RESET} >>> {str(len(bot.user.friends))}")
     print(f"{MAIN_CLR}Blocked  {RESET} >>> {str(len(bot.user.blocked))}")
     print(f"{MAIN_CLR}Servers  {RESET} >>> {str(len(bot.guilds))}")
+    print(f"{MAIN_CLR}Prefix   {RESET} >>> {str(__PREFIX__)}")
 
 @bot.event
 async def on_message(message):
