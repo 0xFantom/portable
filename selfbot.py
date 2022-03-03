@@ -339,12 +339,12 @@ async def _tokeninfo(ctx, token):
     res.append("```")
     await ctx.send("\n".join(res), delete_after=__DELETE_CMD_OUTPUT_AFTER__)
 
-@bot.command("config", help="changes config", aliases=["c"])
-async def _config(ctx, key: str, value: str):
-    info = config
-    info[key] = value
-    with open("config.jsonc", "w") as f:
-        json.dump(info, f)
+# @bot.command("config", help="changes config", aliases=["c"])
+# async def _config(ctx, key: str, value: str):
+#     info = config
+#     info[key] = value
+#     with open("config.jsonc", "w") as f:
+#         jstyleson.dump(info, f)
 
 @bot.command("serverinfo", help="Shows server info", aliases=["si"])
 async def _serverinfo(ctx):
