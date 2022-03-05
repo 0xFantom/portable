@@ -1,1 +1,3 @@
-# self
+# Portable
+
+`Selfbot Using Python`
